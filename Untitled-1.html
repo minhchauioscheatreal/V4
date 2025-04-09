@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>App Config V4 By Chau</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: #000;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    canvas#netCanvas, canvas#magicCanvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .panel {
+      position: relative;
+      z-index: 1;
+      border: 1px solid #ccc;
+      padding: 16px;
+      border-radius: 12px;
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 0 15px #0f0, 0 0 30px #0f0 inset;
+      animation: float 3s ease-in-out infinite;
+    }
+    .panel-heading {
+      font-size: 1.5em;
+      margin-bottom: 12px;
+      background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
+      background-size: 400%;
+      animation: rainbowFlow 6s linear infinite;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: bold;
+    }
+    @keyframes rainbowFlow {
+      0% { background-position: 0% }
+      100% { background-position: 400% }
+    }
+    .panel-body {
+      color: white;
+    }
+    .option {
+      display: flex;
+      align-items: center;
+      justify-content: start;
+      margin: 8px 0;
+      gap: 10px;
+      font-size: 1em;
+    }
+    .highlight-green {
+      border: 2px solid lime;
+      border-radius: 6px;
+      padding: 2px 6px;
+      box-shadow: 0 0 10px lime;
+      background: rgba(0,255,0,0.1);
+    }
+    .highlight-purple {
+      border: 2px solid purple;
+      border-radius: 6px;
+      padding: 2px 6px;
+      box-shadow: 0 0 10px purple;
+      background: rgba(128,0,128,0.1);
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="netCanvas"></canvas>
+  <canvas id="magicCanvas"></canvas>
+  <div class="panel" id="mainPanel">
+    <div class="panel-heading">𝐥𝐚𝐲𝐩𝐞𝐫𝐬𝐨𝐧 𝐒𝐚𝐯𝐞𝐛𝐨𝐭 𝐕𝟒</div>
+    <div class="panel-body">
+      <div class="option">
+        <label for="device">Thiết bị:</label>
+        <span id="device" class="highlight-green"></span>
+      </div>
+      <div class="option">
+        <input type="checkbox" id="fixLag" onclick="toggleFixLag()">
+        <label for="fixLag">FIX LAG - <span class="highlight-purple">19,72541%</span></label>
+      </div>
+      <div class="option">
+        <input type="checkbox" id="lightAim" onclick="toggleLightAim()">
+        <label for="lightAim">NO DELAY CLICK <span class="highlight-purple">.on.</span></label>
+      </div>
+      <div class="option">
+        <input type="checkbox" id="changeDevice" onclick="toggleChangeDevice()">
+        <label for="changeDevice">CHANGE DEVICE <span class="highlight-purple">.update.</span></label>
+      </div>
+    </div>
+  </div>
+
+  <audio id="magicSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_3848e9b36e.mp3?filename=magic-sparkle-10899.mp3"></audio>
+
+  <script>
+    document.getElementById('device').textContent = navigator.userAgent;
+    function toggleFixLag() {
+      if (document.getElementById("fixLag").checked) {
+        alert("Đã kích hoạt 19,72541%");
+      }
+    }
+
+    function toggleLightAim() {
+      if (document.getElementById("lightAim").checked) {
+        alert("Đã kích hoạt NO DELAY CLICK");
+      }
+    }
+
+    function toggleChangeDevice() {
+      if (document.getElementById("changeDevice").checked) {
+        alert("Đã CHANGE thiết bị");
+      }
+    }
+
+    function playMagicSound() {
+      const sound = document.getElementById('magicSound');
+      sound.currentTime = 0;
+      sound.play();
+    }
+
+    function createParticle(x, y) {
+      const particle = document.createElement('div');
+      particle.style.position = 'fixed';
+      particle.style.left = x + 'px';
+      particle.style.top = y + 'px';
+      particle.style.width = '10px';
+      particle.style.height = '10px';
+      particle.style.borderRadius = '50%';
+      particle.style.background = 'radial-gradient(circle, #fff, #a0f)';
+      particle.style.pointerEvents = 'none';
+      particle.style.zIndex = 9999;
+      document.body.appendChild(particle);
+
+      let dx = (Math.random() - 0.5) * 20;
+      let dy = (Math.random() - 0.5) * 20;
+      let opacity = 1;
+
+      function animate() {
+        x += dx;
+        y += dy;
+        opacity -= 0.02;
+        particle.style.left = x + 'px';
+        particle.style.top = y + 'px';
+        particle.style.opacity = opacity;
+        if (opacity <= 0) {
+          particle.remove();
+        } else {
+          requestAnimationFrame(animate);
+        }
+      }
+      animate();
+    }
+
+    function triggerMagicEffect(x, y) {
+      playMagicSound();
+      for (let i = 0; i < 20; i++) {
+        createParticle(x, y);
+      }
+    }
+
+    document.addEventListener('click', (e) => {
+      triggerMagicEffect(e.clientX, e.clientY);
+    });
+
+    function toggleFixLag() {
+      const fixLag = document.getElementById('fixLag');
+      if (fixLag.checked) {
+        alert('Đã kích hoạt 19,72541%');
+      }
+    }
+
+    function toggleLightAim() {
+      const lightAim = document.getElementById('lightAim');
+      if (lightAim.checked) {
+        alert('Đã kích hoạt NO DELAY CLICK');
+      }
+    }
+
+    function toggleChangeDevice() {
+      const changeDevice = document.getElementById('changeDevice');
+      if (changeDevice.checked) {
+        alert('Đã CHANGE thiết bị');
+      }
+    }
+
+    // Mạng nhện động
+    const netCanvas = document.getElementById('netCanvas');
+    const netCtx = netCanvas.getContext('2d');
+    netCanvas.width = window.innerWidth;
+    netCanvas.height = window.innerHeight;
+
+    let points = Array.from({ length: 60 }, () => ({
+      x: Math.random() * netCanvas.width,
+      y: Math.random() * netCanvas.height,
+      dx: (Math.random() - 0.5) * 1.5,
+      dy: (Math.random() - 0.5) * 1.5,
+    }));
+
+    function drawNet() {
+      netCtx.clearRect(0, 0, netCanvas.width, netCanvas.height);
+      for (let i = 0; i < points.length; i++) {
+        let p1 = points[i];
+        p1.x += p1.dx;
+        p1.y += p1.dy;
+        if (p1.x < 0 || p1.x > netCanvas.width) p1.dx *= -1;
+        if (p1.y < 0 || p1.y > netCanvas.height) p1.dy *= -1;
+
+        for (let j = i + 1; j < points.length; j++) {
+          let p2 = points[j];
+          let dist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+          if (dist < 100) {
+            netCtx.beginPath();
+            netCtx.strokeStyle = 'rgba(255,0,0,' + (1 - dist / 100) + ')';
+            netCtx.moveTo(p1.x, p1.y);
+            netCtx.lineTo(p2.x, p2.y);
+            netCtx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(drawNet);
+    }
+    drawNet();
+
+    // Vòng tròn phép thuật
+    const magicCanvas = document.getElementById('magicCanvas');
+    const magicCtx = magicCanvas.getContext('2d');
+    magicCanvas.width = window.innerWidth;
+    magicCanvas.height = window.innerHeight;
+
+    function drawMagicCircle(ctx, x, y, radius, time) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(time / 2000);
+      ctx.strokeStyle = 'rgba(128,0,255,0.7)';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for (let i = 0; i < 8; i++) {
+        let angle = (i * Math.PI) / 4;
+        ctx.moveTo(0, 0);
+        ctx.lineTo(radius * Math.cos(angle), radius * Math.sin(angle));
+      }
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(0, 0, radius, 0, Math.PI * 2);
+      ctx.stroke();
+
+      for (let i = 0; i < 5; i++) {
+        ctx.beginPath();
+        ctx.arc(0, 0, (radius / 5) * i, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    function animateMagic() {
+      magicCtx.clearRect(0, 0, magicCanvas.width, magicCanvas.height);
+      const panel = document.getElementById('mainPanel');
+      const rect = panel.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      drawMagicCircle(magicCtx, centerX, centerY, 180, performance.now());
+      requestAnimationFrame(animateMagic);
+    }
+    animateMagic();
+  </script>
+</body>
+</html>
